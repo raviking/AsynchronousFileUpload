@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Asychronous file upload</h2>
+
+@using (Html.BeginForm("Index","Home",new AjaxOptions() { HttpMethod="POST"},new { enctype="multipart/form-data"})) {
+    @Html.AntiForgeryToken();
+    <input type="file" id="fileupload" />
+    <input type="submit" value="File upload" />
+}
+<div class="progress">
+    <div class="progress-bar">0%</div>
+</div>
+<div id="status"></div>
