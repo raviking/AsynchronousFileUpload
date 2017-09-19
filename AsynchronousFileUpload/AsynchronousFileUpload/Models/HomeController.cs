@@ -27,7 +27,7 @@ namespace AsynchronousFileUpload.Models
                     {
                         if (file != null && file.ContentLength > 0)
                         {
-                            var filename = Path.GetExtension(file.FileName);
+                            var filename = Path.GetFileName(file.FileName);
                             var path = Path.Combine(Server.MapPath("~/Files"),filename);
                             file.SaveAs(path);
                             filecount++;
