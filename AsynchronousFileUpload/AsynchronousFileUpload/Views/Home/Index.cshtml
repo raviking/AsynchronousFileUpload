@@ -2,14 +2,64 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2>Asychronous file upload</h2>
-
-@using (Html.BeginForm("Index","Home",new AjaxOptions() { HttpMethod="POST"},new { enctype="multipart/form-data"})) {
-    @Html.AntiForgeryToken();
-    <input type="file" id="fileupload" />
-    <input type="submit" value="File upload" />
-}
-<div class="progress">
-    <div class="progress-bar">0%</div>
+<h2>Jquery Asychronous file upload</h2>
+<style type="text/css">
+    .progress-bar{
+        max-width:400px;
+    }
+    .progress{
+        max-width:400px;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            @using (Ajax.BeginForm("Index", "Home", new AjaxOptions() { HttpMethod = "POST" },
+            new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken();
+                <input type="file" class="form-control" name="files" id="fileupload" />
+                <input type="submit" class="btn btn-success" value="File upload" />
+            }
+            <br />
+            <div class="progress">
+                <div class="progress-bar">0%</div>
+            </div>
+            <div id="status"></div>
+        </div>
+    </div>
 </div>
-<div id="status"></div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript">
+       $(document).ready(function(){
+           var bar = $('.progress-bar');
+           var percent = $('.progress-bar');
+           var status = $('#status');
+           
+           $('form').ajaxForm({
+               beforeSend: function () {
+                   status.empty();
+                   var percentValue = '0%';
+                   bar.width(percentValue);
+                   percent.html(percentValue);
+               },
+               uploadProgress: function (event, position, total, percentComplete) {
+                   var percentValue = percentComplete + '%';
+                   bar.width(percentValue);
+                   percent.html(percentValue);
+               },
+               success: function (d) {
+                   var percentValue = '100%';
+                   bar.width(percentValue);
+                   percent.html(percentValue);
+                   $('#fileupload').val('');
+                   alert(d);
+               },
+               complete: function (xhr) {
+                   status.html(xhr.responseText);
+               }
+           });
+       });
+</script>
